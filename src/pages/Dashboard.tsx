@@ -543,44 +543,45 @@ export function Dashboard() {
                 </div>
               ) : isSessionActive ? (
                 /* State B: Active Session */
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-2">
-                  <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 bg-success/10 rounded-2xl flex items-center justify-center relative shadow-sm border border-success/5">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-2">
+                  <div className="flex items-center gap-5 p-4 bg-success/5 rounded-2xl border border-success/10 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-success opacity-50" />
+                    <div className="w-14 h-14 bg-success/15 rounded-xl flex items-center justify-center relative shadow-inner">
                       <Timer className="h-7 w-7 text-success" />
                       <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-success rounded-full border-2 border-card animate-pulse shadow-sm" />
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold text-foreground tracking-tight">Active Session</span>
+                        <span className="text-lg font-bold text-foreground tracking-tight">Active Session</span>
                         <span className="text-[10px] px-2 py-0.5 bg-success/20 text-success rounded-full font-bold uppercase tracking-wider">Live</span>
                       </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Clock className="h-3.5 w-3.5" />
-                        <p className="text-sm font-medium">Started at {editingData.checkIn}</p>
+                      <div className="flex items-center gap-2 text-muted-foreground/80">
+                        <Clock className="h-3.5 w-3.5 text-success/70" />
+                        <p className="text-xs font-semibold">Started at {editingData.checkIn}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-baseline md:items-center gap-10">
-                    <div className="text-right md:text-center">
+                  <div className="flex items-center justify-between p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                    <div className="space-y-0.5">
+                      <p className="text-[10px] uppercase font-bold tracking-widest text-primary/60">Session Time</p>
                       <p className="text-3xl font-black text-foreground tabular-nums tracking-tighter">{sessionTime}</p>
-                      <p className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60 mt-0.5">Elapsed</p>
                     </div>
                     <div className="flex gap-2">
                       <Button
                         variant="default"
                         size="sm"
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 h-9 shadow-sm"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs px-5 h-9 rounded-lg shadow-md shadow-primary/20"
                         onClick={toggleSession}
                         disabled={loading}
                       >
-                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pause className="mr-2 h-4 w-4 fill-current" />}
+                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pause className="mr-1.5 h-4 w-4 fill-current" />}
                         End Now
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-muted-foreground hover:bg-secondary/50 h-9 px-3 font-medium"
+                        className="text-muted-foreground hover:bg-secondary/50 h-9 px-3 font-semibold text-xs rounded-lg"
                         onClick={() => setIsEditingToday(true)}
                       >
                         Edit
@@ -590,25 +591,26 @@ export function Dashboard() {
                 </div>
               ) : (
                 /* State C: Completed Today */
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-2">
-                  <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center shadow-sm border border-primary/5">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-2">
+                  <div className="flex items-center gap-5 p-4 bg-secondary/30 rounded-2xl border border-border/50">
+                    <div className="w-14 h-14 bg-primary/15 rounded-xl flex items-center justify-center shadow-inner">
                       <Clock className="h-7 w-7 text-primary" />
                     </div>
                     <div className="space-y-1">
-                      <p className="text-xl font-bold text-foreground tracking-tight">Day Completed</p>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Timer className="h-3.5 w-3.5" />
-                        <p className="text-sm font-medium">
+                      <p className="text-lg font-bold text-foreground tracking-tight">Day Completed</p>
+                      <div className="flex items-center gap-2 text-muted-foreground/80 bg-background/50 px-2 py-1 rounded-md border border-border/30 w-fit">
+                        <Timer className="h-3.5 w-3.5 text-primary/70" />
+                        <p className="text-xs font-semibold tabular-nums">
                           {editingData.checkIn} — {editingData.checkOut || "--:--"}
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-baseline md:items-center gap-10">
-                    {todayRecord?.check_out && todayRecord?.check_in && (
-                      <div className="text-right md:text-center">
+                  <div className="flex items-center justify-between p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                    <div className="space-y-0.5">
+                      <p className="text-[10px] uppercase font-bold tracking-widest text-primary/60">Hours Recorded</p>
+                      <div className="flex items-baseline gap-1">
                         <p className="text-3xl font-black text-foreground tabular-nums tracking-tighter">
                           {(() => {
                             const diff = new Date(todayRecord.check_out!).getTime() - new Date(todayRecord.check_in).getTime();
@@ -617,64 +619,64 @@ export function Dashboard() {
                             return `${h}h ${m}m`;
                           })()}
                         </p>
-                        <p className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60 mt-0.5">Worked Total</p>
+                        <span className="text-xs font-bold text-muted-foreground/60 uppercase">Total</span>
                       </div>
-                    )}
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-border hover:bg-secondary/50 font-medium px-4 h-9"
-                        onClick={() => setIsEditingToday(true)}
-                      >
-                        Edit Today
-                      </Button>
                     </div>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="bg-background hover:bg-secondary border-border font-bold text-xs px-5 h-9 rounded-lg transition-all"
+                      onClick={() => setIsEditingToday(true)}
+                    >
+                      Edit Session
+                    </Button>
                   </div>
                 </div>
               )}
             </div>
           )}
         </CardContent>
-      </Card>
+      </Card >
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {metrics.map((metric, index) => {
-          const Icon = metric.icon;
-          return (
-            <Card key={index} className="bg-card border-border hover:border-primary/50 transition-colors">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {metric.title}
-                  </CardTitle>
-                  <div className={`w-10 h-10 ${metric.bgColor} rounded-lg flex items-center justify-center`}>
-                    <Icon className={`h-5 w-5 ${metric.color}`} />
+      < div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" >
+        {
+          metrics.map((metric, index) => {
+            const Icon = metric.icon;
+            return (
+              <Card key={index} className="bg-card border-border hover:border-primary/50 transition-colors">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                      {metric.title}
+                    </CardTitle>
+                    <div className={`w-10 h-10 ${metric.bgColor} rounded-lg flex items-center justify-center`}>
+                      <Icon className={`h-5 w-5 ${metric.color}`} />
+                    </div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-3xl font-bold text-foreground">{metric.value}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{metric.subtitle}</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-3xl font-bold text-foreground">{metric.value}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{metric.subtitle}</p>
+                    </div>
+                    <div className="space-y-2">
+                      {!metric.hideProgress && <Progress value={metric.progress} className="h-2" />}
+                      <p className="text-xs text-muted-foreground font-medium">{metric.insight}</p>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    {!metric.hideProgress && <Progress value={metric.progress} className="h-2" />}
-                    <p className="text-xs text-muted-foreground font-medium">{metric.insight}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                </CardContent>
+              </Card>
+            );
+          })
+        }
+      </div >
 
       {/* Recent Activity and Quick Stats Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      < div className="grid grid-cols-1 lg:grid-cols-3 gap-6" >
         {/* Recent Activity */}
-        <Card className="lg:col-span-2 bg-card border-border">
+        < Card className="lg:col-span-2 bg-card border-border" >
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-primary" />
@@ -709,10 +711,10 @@ export function Dashboard() {
               )}
             </div>
           </CardContent>
-        </Card>
+        </Card >
 
         {/* Quick Stats */}
-        <Card className="bg-card border-border">
+        < Card className="bg-card border-border" >
           <CardHeader>
             <CardTitle>This Week</CardTitle>
           </CardHeader>
@@ -743,8 +745,8 @@ export function Dashboard() {
               </div>
             </div>
           </CardContent>
-        </Card>
-      </div>
-    </div>
+        </Card >
+      </div >
+    </div >
   );
 }
