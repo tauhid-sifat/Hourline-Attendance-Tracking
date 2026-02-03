@@ -414,26 +414,25 @@ export function Dashboard() {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 space-y-4">
       {/* Header */}
       <div>
-        <h2 className="text-3xl font-bold text-foreground">Dashboard</h2>
-        <p className="text-muted-foreground mt-1">Welcome back! Here's your attendance overview.</p>
+        <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
+        <p className="text-xs text-muted-foreground mt-0.5">Welcome back! Here's your attendance overview.</p>
       </div>
 
-      {/* Today Control Panel */}
-      <Card className="bg-card border-border overflow-hidden">
-        <div className="bg-primary/[0.03] border-b border-border p-4 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1.5 bg-primary/10 rounded-md">
-              <Calendar className="h-4 w-4 text-primary" />
-            </div>
-            <h3 className="font-semibold text-sm text-foreground">
-              Today — {new Date().toLocaleDateString("en-US", { month: 'short', day: 'numeric' })}
+      {/* Unified Today Panel - Integrated & Slim */}
+      <div className="space-y-2">
+        {/* Header inside Panel Area */}
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-primary md:hidden" />
+            <h3 className="font-bold text-sm text-foreground">
+              Today, {new Date().toLocaleDateString("en-US", { month: 'short', day: 'numeric' })}
             </h3>
           </div>
-          <div className="flex items-center gap-3">
-            <Label className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground mr-1">Day Type</Label>
+          <div className="flex items-center gap-2 scale-90 origin-right">
+            <Label className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground mr-1 hidden sm:block">Day Type</Label>
             <Select
               value={editingData.dayType}
               onValueChange={(val: string) => {
@@ -472,16 +471,16 @@ export function Dashboard() {
           </div>
         </div>
 
-        <CardContent className="p-6">
+        {/* Status Area */}
+        <div className="px-1">
           {/* State D: Leave / Holiday */}
           {(editingData.dayType === 'leave' || editingData.dayType === 'holiday') ? (
-            <div className="flex flex-col items-center justify-center py-4 space-y-4">
-              <div className="text-center">
-                <p className="text-xl font-medium text-foreground">Enjoy your day off!</p>
-                <p className="text-sm text-muted-foreground mt-1">No working hours required for today.</p>
-              </div>
+            <div className="flex flex-col items-center justify-center py-4 bg-secondary/10 rounded-2xl border border-dashed border-border/50">
+              <p className="text-sm font-medium text-foreground">Enjoy your day off!</p>
               <Button
-                variant="outline"
+                variant="link"
+                size="sm"
+                className="text-xs text-primary h-6"
                 onClick={() => {
                   setEditingData(prev => ({ ...prev, dayType: 'working' }));
                   if (todayRecord) {
@@ -493,79 +492,76 @@ export function Dashboard() {
               </Button>
             </div>
           ) : (
-            <div className="space-y-6 max-w-4xl mx-auto">
+            <div className="space-y-4 max-w-4xl mx-auto">
               {!todayRecord ? (
                 /* State A: No Entry Today */
-                <div className="flex flex-col items-center justify-center py-6 space-y-5">
-                  <div className="text-center space-y-1">
-                    <p className="text-xl font-bold text-foreground">You haven't started your day yet.</p>
-                    <p className="text-sm text-muted-foreground">Ready to clock in and track your progress?</p>
-                  </div>
+                <div className="flex flex-col items-center justify-center py-5 bg-primary/5 rounded-2xl border border-primary/10 space-y-3">
+                  <p className="text-sm font-bold text-foreground">You haven't started your day yet.</p>
                   <Button
-                    size="lg"
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 h-12 rounded-xl transition-all shadow-md shadow-primary/20"
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 h-9 rounded-xl transition-all shadow-md shadow-primary/20"
                     onClick={toggleSession}
                     disabled={loading}
                   >
-                    {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Play className="mr-2 h-5 w-5 fill-current" />}
+                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="mr-2 h-4 w-4 fill-current" />}
                     Start Session
                   </Button>
                 </div>
               ) : isEditingToday ? (
                 /* Editing Mode (State C expanded) */
-                <div className="space-y-4">
+                <div className="p-4 bg-card border border-border rounded-2xl space-y-4 shadow-sm">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="text-xs">Clock In</Label>
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] font-bold uppercase text-muted-foreground">Clock In</Label>
                       <Input
                         type="time"
                         value={editingData.checkIn}
                         onChange={(e) => setEditingData(prev => ({ ...prev, checkIn: e.target.value }))}
-                        className="bg-secondary/50 border-border"
+                        className="h-8 bg-secondary/50 border-border text-sm"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label className="text-xs">Clock Out</Label>
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] font-bold uppercase text-muted-foreground">Clock Out</Label>
                       <Input
                         type="time"
                         value={editingData.checkOut}
                         onChange={(e) => setEditingData(prev => ({ ...prev, checkOut: e.target.value }))}
-                        className="bg-secondary/50 border-border"
+                        className="h-8 bg-secondary/50 border-border text-sm"
                       />
                     </div>
                   </div>
-                  <div className="flex gap-3 justify-end pt-2">
-                    <Button variant="ghost" onClick={() => setIsEditingToday(false)} disabled={loading}>Cancel</Button>
-                    <Button onClick={handleSaveToday} disabled={loading}>
-                      {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                  <div className="flex gap-2 justify-end">
+                    <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => setIsEditingToday(false)} disabled={loading}>Cancel</Button>
+                    <Button size="sm" className="h-8 text-xs font-bold" onClick={handleSaveToday} disabled={loading}>
+                      {loading && <Loader2 className="h-3.5 w-3.5 animate-spin mr-2" />}
                       Save Changes
                     </Button>
                   </div>
                 </div>
               ) : isSessionActive ? (
                 /* State B: Active Session - Slim Unified Bar */
-                <div className="flex items-center justify-between py-3 px-4 bg-success/5 rounded-2xl border border-success/20 gap-4 relative overflow-hidden group transition-all hover:bg-success/[0.07]">
+                <div className="flex items-center justify-between py-2.5 px-4 bg-success/5 rounded-2xl border border-success/20 gap-4 relative overflow-hidden group transition-all hover:bg-success/[0.07]">
                   <div className="absolute top-0 left-0 w-1 h-full bg-success opacity-40" />
 
                   {/* Left: Session Info */}
                   <div className="flex items-center gap-3 shrink-0">
-                    <div className="w-10 h-10 bg-success/15 rounded-lg flex items-center justify-center relative shadow-inner shrink-0 ring-1 ring-success/10">
-                      <Timer className="h-5 w-5 text-success" />
-                      <div className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 bg-success rounded-full border-2 border-card animate-pulse shadow-sm" />
+                    <div className="w-9 h-9 bg-success/15 rounded-lg flex items-center justify-center relative shadow-inner shrink-0 ring-1 ring-success/10">
+                      <Timer className="h-4.5 w-4.5 text-success" />
+                      <div className="absolute -top-0.5 -right-0.5 h-2 w-2 bg-success rounded-full border-2 border-card animate-pulse shadow-sm" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-sm font-bold text-foreground tracking-tight">Active</span>
-                        <span className="text-[8px] px-1 py-0.5 bg-success/20 text-success rounded font-black uppercase tracking-wider">Live</span>
+                      <div className="flex items-center gap-1.5 leading-none mb-0.5">
+                        <span className="text-xs font-bold text-foreground tracking-tight">Active</span>
+                        <span className="text-[7px] px-1 py-0.5 bg-success/20 text-success rounded font-black uppercase tracking-wider">Live</span>
                       </div>
-                      <p className="text-[10px] font-semibold text-muted-foreground/60 leading-none">Started {editingData.checkIn}</p>
+                      <p className="text-[9px] font-semibold text-muted-foreground/60 leading-none">Started {editingData.checkIn}</p>
                     </div>
                   </div>
 
                   {/* Middle: Live Timer */}
-                  <div className="flex items-center gap-3 px-4 border-x border-border/10">
-                    <p className="text-[9px] uppercase font-bold tracking-widest text-success/40 hidden sm:block">Elapsed</p>
-                    <p className="text-2xl font-black text-foreground tabular-nums tracking-tighter leading-none">{sessionTime}</p>
+                  <div className="flex items-center gap-2 px-4 border-x border-border/10 shrink-0">
+                    <p className="text-[8px] uppercase font-bold tracking-widest text-success/40 hidden sm:block">Elapsed</p>
+                    <p className="text-xl font-black text-foreground tabular-nums tracking-tighter leading-none">{sessionTime}</p>
                   </div>
 
                   {/* Right: Actions */}
@@ -573,17 +569,17 @@ export function Dashboard() {
                     <Button
                       variant="default"
                       size="sm"
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs px-4 h-8 rounded-lg shadow-md shadow-primary/10 transition-all hover:scale-[1.02]"
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-[10px] px-3 h-7 rounded-lg shadow-md shadow-primary/10 transition-all hover:scale-[1.02]"
                       onClick={toggleSession}
                       disabled={loading}
                     >
-                      {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Pause className="mr-1.5 h-3.5 w-3.5 fill-current" />}
+                      {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Pause className="mr-1 h-3.5 w-3.5 fill-current" />}
                       End
                     </Button>
                     <Button
                       variant="secondary"
                       size="icon"
-                      className="h-8 w-8 bg-background hover:bg-secondary border-border rounded-lg shrink-0"
+                      className="h-7 w-7 bg-background hover:bg-secondary border-border rounded-lg shrink-0"
                       onClick={() => setIsEditingToday(true)}
                     >
                       <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
@@ -592,40 +588,38 @@ export function Dashboard() {
                 </div>
               ) : (
                 /* State C: Completed Today - Slim Unified Bar */
-                <div className="flex items-center justify-between py-3 px-4 bg-secondary/20 rounded-2xl border border-border/40 gap-4 group transition-all hover:bg-secondary/30">
+                <div className="flex items-center justify-between py-2.5 px-4 bg-secondary/20 rounded-2xl border border-border/40 gap-4 group transition-all hover:bg-secondary/30">
                   {/* Left: Completion Info */}
                   <div className="flex items-center gap-3 shrink-0">
-                    <div className="w-10 h-10 bg-primary/15 rounded-lg flex items-center justify-center shadow-inner shrink-0 ring-1 ring-primary/10">
-                      <Clock className="h-5 w-5 text-primary" />
+                    <div className="w-9 h-9 bg-primary/15 rounded-lg flex items-center justify-center shadow-inner shrink-0 ring-1 ring-primary/10">
+                      <Clock className="h-4.5 w-4.5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-foreground tracking-tight leading-tight">Done</p>
-                      <p className="text-[10px] font-semibold text-muted-foreground/60 tabular-nums leading-none">
+                      <p className="text-xs font-bold text-foreground tracking-tight leading-none mb-0.5">Done</p>
+                      <p className="text-[9px] font-semibold text-muted-foreground/60 tabular-nums leading-none">
                         {editingData.checkIn}—{editingData.checkOut || "--:--"}
                       </p>
                     </div>
                   </div>
 
                   {/* Middle: Calculated Metrics */}
-                  <div className="flex items-center gap-3 px-4 border-x border-border/10">
-                    <p className="text-[9px] uppercase font-bold tracking-widest text-muted-foreground/40 hidden sm:block">Worked</p>
-                    <div className="flex items-baseline gap-1">
-                      <p className="text-2xl font-black text-foreground tabular-nums tracking-tighter leading-none">
-                        {(() => {
-                          const diff = new Date(todayRecord.check_out!).getTime() - new Date(todayRecord.check_in).getTime();
-                          const h = Math.floor(diff / 3600000);
-                          const m = Math.floor((diff % 3600000) / 60000);
-                          return `${h}h ${m}m`;
-                        })()}
-                      </p>
-                    </div>
+                  <div className="flex items-center gap-2 px-4 border-x border-border/10 shrink-0">
+                    <p className="text-[8px] uppercase font-bold tracking-widest text-muted-foreground/40 hidden sm:block">Worked</p>
+                    <p className="text-xl font-black text-foreground tabular-nums tracking-tighter leading-none">
+                      {(() => {
+                        const diff = new Date(todayRecord.check_out!).getTime() - new Date(todayRecord.check_in).getTime();
+                        const h = Math.floor(diff / 3600000);
+                        const m = Math.floor((diff % 3600000) / 60000);
+                        return `${h}h ${m}m`;
+                      })()}
+                    </p>
                   </div>
 
                   {/* Right: Actions */}
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="bg-background hover:bg-secondary border-border font-bold text-[10px] px-4 h-8 rounded-lg transition-all shadow-sm hover:scale-[1.02]"
+                    className="bg-background hover:bg-secondary border-border font-bold text-[9px] px-3 h-7 rounded-lg transition-all shadow-sm hover:scale-[1.02]"
                     onClick={() => setIsEditingToday(true)}
                   >
                     Edit
@@ -634,11 +628,11 @@ export function Dashboard() {
               )}
             </div>
           )}
-        </CardContent>
-      </Card >
+        </div>
+      </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {
           metrics.map((metric, index) => {
             const Icon = metric.icon;
@@ -673,7 +667,7 @@ export function Dashboard() {
       </div >
 
       {/* Recent Activity and Quick Stats Row */}
-      < div className="grid grid-cols-1 lg:grid-cols-3 gap-6" >
+      < div className="grid grid-cols-1 lg:grid-cols-3 gap-4" >
         {/* Recent Activity */}
         < Card className="lg:col-span-2 bg-card border-border" >
           <CardHeader>
