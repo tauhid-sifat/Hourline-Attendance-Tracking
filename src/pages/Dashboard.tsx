@@ -422,20 +422,21 @@ export function Dashboard() {
 
       {/* Today Control Panel */}
       <Card className="bg-card border-border overflow-hidden">
-        <div className="bg-primary/5 border-b border-border p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Calendar className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-foreground">
+        <div className="bg-primary/[0.03] border-b border-border p-4 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 bg-primary/10 rounded-md">
+              <Calendar className="h-4 w-4 text-primary" />
+            </div>
+            <h3 className="font-semibold text-sm text-foreground">
               Today — {new Date().toLocaleDateString("en-US", { month: 'short', day: 'numeric' })}
             </h3>
           </div>
-          <div className="flex items-center gap-2">
-            <Label className="text-xs text-muted-foreground mr-1">Day Type</Label>
+          <div className="flex items-center gap-3">
+            <Label className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground mr-1">Day Type</Label>
             <Select
               value={editingData.dayType}
               onValueChange={(val: string) => {
                 setEditingData(prev => ({ ...prev, dayType: val }));
-                // Auto-save day type change if not currently editing in/out
                 if (!isEditingToday) {
                   let status = 'Present';
                   if (val === 'leave') status = 'On Leave';
@@ -457,7 +458,7 @@ export function Dashboard() {
                 }
               }}
             >
-              <SelectTrigger className="w-[120px] h-8 bg-transparent border-border text-xs">
+              <SelectTrigger className="w-[110px] h-7 bg-background/50 border-border text-[11px] font-medium">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -494,18 +495,18 @@ export function Dashboard() {
             <div className="space-y-6">
               {!todayRecord ? (
                 /* State A: No Entry Today */
-                <div className="flex flex-col items-center justify-center py-4 space-y-4">
-                  <div className="text-center">
-                    <p className="text-xl font-medium text-foreground">You haven't started your day yet.</p>
-                    <p className="text-sm text-muted-foreground mt-1">Ready to clock in?</p>
+                <div className="flex flex-col items-center justify-center py-6 space-y-5">
+                  <div className="text-center space-y-1">
+                    <p className="text-xl font-bold text-foreground">You haven't started your day yet.</p>
+                    <p className="text-sm text-muted-foreground">Ready to clock in and track your progress?</p>
                   </div>
                   <Button
                     size="lg"
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-8"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 h-12 rounded-xl transition-all shadow-md shadow-primary/20"
                     onClick={toggleSession}
                     disabled={loading}
                   >
-                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="mr-2 h-4 w-4" />}
+                    {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Play className="mr-2 h-5 w-5 fill-current" />}
                     Start Session
                   </Button>
                 </div>
@@ -542,59 +543,73 @@ export function Dashboard() {
                 </div>
               ) : isSessionActive ? (
                 /* State B: Active Session */
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center relative">
-                      <Timer className="h-6 w-6 text-success" />
-                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-success rounded-full animate-pulse" />
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-2">
+                  <div className="flex items-center gap-5">
+                    <div className="w-14 h-14 bg-success/10 rounded-2xl flex items-center justify-center relative shadow-sm border border-success/5">
+                      <Timer className="h-7 w-7 text-success" />
+                      <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-success rounded-full border-2 border-card animate-pulse shadow-sm" />
                     </div>
-                    <div>
+                    <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-lg font-bold text-foreground">Active Session</span>
-                        <span className="text-xs px-2 py-0.5 bg-success/20 text-success rounded-full font-medium">Live</span>
+                        <span className="text-xl font-bold text-foreground tracking-tight">Active Session</span>
+                        <span className="text-[10px] px-2 py-0.5 bg-success/20 text-success rounded-full font-bold uppercase tracking-wider">Live</span>
                       </div>
-                      <p className="text-sm text-muted-foreground">Started at {editingData.checkIn}</p>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Clock className="h-3.5 w-3.5" />
+                        <p className="text-sm font-medium">Started at {editingData.checkIn}</p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-8">
-                    <div className="text-center">
-                      <p className="text-2xl font-black text-foreground">{sessionTime}</p>
-                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Elapsed</p>
+                  <div className="flex items-baseline md:items-center gap-10">
+                    <div className="text-right md:text-center">
+                      <p className="text-3xl font-black text-foreground tabular-nums tracking-tighter">{sessionTime}</p>
+                      <p className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60 mt-0.5">Elapsed</p>
                     </div>
                     <div className="flex gap-2">
                       <Button
-                        variant="outline"
-                        className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                        variant="default"
+                        size="sm"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 h-9 shadow-sm"
                         onClick={toggleSession}
                         disabled={loading}
                       >
-                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pause className="mr-2 h-4 w-4" />}
-                        End Session Now
+                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pause className="mr-2 h-4 w-4 fill-current" />}
+                        End Now
                       </Button>
-                      <Button variant="ghost" className="text-muted-foreground" onClick={() => setIsEditingToday(true)}>Edit</Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-muted-foreground hover:bg-secondary/50 h-9 px-3 font-medium"
+                        onClick={() => setIsEditingToday(true)}
+                      >
+                        Edit
+                      </Button>
                     </div>
                   </div>
                 </div>
               ) : (
                 /* State C: Completed Today */
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                      <Clock className="h-6 w-6 text-primary" />
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-2">
+                  <div className="flex items-center gap-5">
+                    <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center shadow-sm border border-primary/5">
+                      <Clock className="h-7 w-7 text-primary" />
                     </div>
-                    <div>
-                      <p className="text-lg font-bold text-foreground">Day Completed</p>
-                      <p className="text-sm text-muted-foreground">
-                        {editingData.checkIn} — {editingData.checkOut || "--:--"}
-                      </p>
+                    <div className="space-y-1">
+                      <p className="text-xl font-bold text-foreground tracking-tight">Day Completed</p>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Timer className="h-3.5 w-3.5" />
+                        <p className="text-sm font-medium">
+                          {editingData.checkIn} — {editingData.checkOut || "--:--"}
+                        </p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-8">
+                  <div className="flex items-baseline md:items-center gap-10">
                     {todayRecord?.check_out && todayRecord?.check_in && (
-                      <div className="text-center">
-                        <p className="text-2xl font-black text-foreground">
+                      <div className="text-right md:text-center">
+                        <p className="text-3xl font-black text-foreground tabular-nums tracking-tighter">
                           {(() => {
                             const diff = new Date(todayRecord.check_out!).getTime() - new Date(todayRecord.check_in).getTime();
                             const h = Math.floor(diff / 3600000);
@@ -602,12 +617,19 @@ export function Dashboard() {
                             return `${h}h ${m}m`;
                           })()}
                         </p>
-                        <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Worked Total</p>
+                        <p className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60 mt-0.5">Worked Total</p>
                       </div>
                     )}
-                    <Button variant="outline" onClick={() => setIsEditingToday(true)}>
-                      Edit Today
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-border hover:bg-secondary/50 font-medium px-4 h-9"
+                        onClick={() => setIsEditingToday(true)}
+                      >
+                        Edit Today
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}
