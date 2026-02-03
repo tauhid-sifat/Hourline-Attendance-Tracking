@@ -568,7 +568,7 @@ export function Dashboard() {
                   {/* Middle: Live Timer */}
                   <div className="flex-1 flex flex-col items-center justify-center md:border-x border-border/20 px-8 py-2 md:py-0">
                     <p className="text-[10px] uppercase font-bold tracking-widest text-success/60 mb-0.5">Elapsed Time</p>
-                    <p className="text-4xl font-black text-foreground tabular-nums tracking-tighter leading-none pulse-subtle">{sessionTime}</p>
+                    <p className="text-4xl font-black text-foreground tabular-nums tracking-tighter leading-none">{sessionTime}</p>
                   </div>
 
                   {/* Right: Actions */}
