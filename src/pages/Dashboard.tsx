@@ -492,7 +492,7 @@ export function Dashboard() {
               </Button>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-6 max-w-4xl mx-auto">
               {!todayRecord ? (
                 /* State A: No Entry Today */
                 <div className="flex flex-col items-center justify-center py-6 space-y-5">
@@ -547,8 +547,8 @@ export function Dashboard() {
                   <div className="flex items-center gap-5 p-4 bg-success/5 rounded-2xl border border-success/10 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-1 h-full bg-success opacity-50" />
                     <div className="w-14 h-14 bg-success/15 rounded-xl flex items-center justify-center relative shadow-inner">
-                      <Timer className="size-7 text-success" />
-                      <div className="absolute -top-1 -right-1 size-3.5 bg-success rounded-full border-2 border-card animate-pulse shadow-sm" />
+                      <Timer className="h-7 w-7 text-success" />
+                      <div className="absolute -top-1 -right-1 h-3.5 w-3.5 bg-success rounded-full border-2 border-card animate-pulse shadow-sm" />
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
@@ -556,7 +556,7 @@ export function Dashboard() {
                         <span className="text-[10px] px-2 py-0.5 bg-success/20 text-success rounded-full font-bold uppercase tracking-wider">Live</span>
                       </div>
                       <div className="flex items-center gap-2 text-muted-foreground/80">
-                        <Clock className="size-3.5 text-success/70" />
+                        <Clock className="h-3.5 w-3.5 text-success/70" />
                         <p className="text-xs font-semibold">Started at {editingData.checkIn}</p>
                       </div>
                     </div>
@@ -594,12 +594,12 @@ export function Dashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-2">
                   <div className="flex items-center gap-5 p-4 bg-secondary/30 rounded-2xl border border-border/50">
                     <div className="w-14 h-14 bg-primary/15 rounded-xl flex items-center justify-center shadow-inner">
-                      <Clock className="size-7 text-primary" />
+                      <Clock className="h-7 w-7 text-primary" />
                     </div>
                     <div className="space-y-1">
                       <p className="text-lg font-bold text-foreground tracking-tight">Day Completed</p>
                       <div className="flex items-center gap-2 text-muted-foreground/80 bg-background/50 px-2 py-1 rounded-md border border-border/30 w-fit">
-                        <Timer className="size-3.5 text-primary/70" />
+                        <Timer className="h-3.5 w-3.5 text-primary/70" />
                         <p className="text-xs font-semibold tabular-nums">
                           {editingData.checkIn} — {editingData.checkOut || "--:--"}
                         </p>
